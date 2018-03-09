@@ -1,0 +1,79 @@
+\newpage
+\section{Tipo della somma disgiunta}
+
+\subsection{Esercizio 1}
+
+Si scrivano le regole del tipo booleano come tipo semplice e si provi che è
+rappresentabile da N1 + N1.
+
+\begin{lstlisting}[language=Coq]
+Inductive Bool :=
+  | inl (a : unit)
+  | inr (b : unit)
+
+Definition true : Bool := inl tt.
+Definition false : Bool := inr tt.
+\end{lstlisting}
+
+\subsection{Esercizio 2}
+
+Si definisca la funzione predecessore: $p(x) \in Nat \quad [x \in Nat]$
+tale che $p(0) = 0$ e $p(succ(n)) = n$.
+
+\begin{lstlisting}[language=Coq]
+Fixpoint pred (x : nat) : nat :=
+  match x with
+  | 0 => 0
+  | S x => x
+  end.
+
+Lemma pred_0 : pred 0 = 0.
+Proof.
+apply: erefl.
+Qed.
+
+Lemma pred_S (x : nat) : pred (S x) = x.
+Proof.
+apply: erefl.
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 3}
+
+Si mostri che esistono i termini: $dec(z) \in Nat \quad [z \in N1 + Nat]$ e $cod(z) \in N1 + Nat \quad [z \in Nat]$ tali che per ogni numerale n: $dec(cod(0)) = 0$ e $dec(cod(n)) = n$
+
+Nota: in Coq, il tipo induttivo \texttt{sum} (la somma disgiunta di due tipi A e B) è definito nel modo seguente:
+
+\begin{lstlisting}[language=Coq]
+Inductive sum (A B:Type) : Type :=
+  | inl : A -> sum A B
+  | inr : B -> sum A B.
+
+Notation "x + y" := (sum x y) : type_scope.
+\end{lstlisting}
+
+Svolgimento dell'esercizio:
+
+\begin{lstlisting}[language=Coq]
+Definition dec (z : unit + nat) : nat :=
+  match z with
+  | inl tt => 0
+  | inr n => n
+  end.
+
+Definition cod (z : nat) : unit + nat :=
+  match z with
+  | 0 => inl tt
+  | S _ => inr z
+  end.
+
+Lemma dec_0 : dec (cod 0) = 0.
+Proof.
+apply: erefl.
+Qed.
+
+Lemma dec_n (n : nat) : dec (cod (S n)) = S n.
+Proof.
+apply: erefl.
+Qed.
+\end{lstlisting}

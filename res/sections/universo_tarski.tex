@@ -1,0 +1,23 @@
+\newpage
+\section{Il tipo universo ``predicativo'' à la Tarski}
+
+\subsection{Esercizio 1}
+
+Dare la definizione di eliminazione induttiva dell'universo $U_0$.
+
+\begin{prooftree}
+\alwaysNoLine
+\AxiomC{}
+\UnaryInfC{$a_0 \in U_0 \quad [\gamma$]}
+\UnaryInfC{$D(z) \quad type \quad [\gamma, z \in U_0]$}
+\UnaryInfC{$a_1 \in D(N_0) \quad [\gamma]$}
+\UnaryInfC{$a_2 \in D(N_1) \quad [\gamma]$}
+\UnaryInfC{$a_3 \in D(Nat) \quad [\gamma]$}
+\UnaryInfC{$a_4(x, y) \in D(List(x)) \quad [\gamma, x \in U_0, y \in D(x)]$}
+\UnaryInfC{$a_5(x, y, z, u) \in D(x + y) \quad [\gamma, x \in U_0, y \in U_0, z \in D(x), u \in D(y)]$}
+\UnaryInfC{$a_6(x, y, z, u) \in D(Id(x, y, z)) \quad [\gamma, x \in U_0, y \in D(x), z \in D(x), u \in D(x)]$}
+\UnaryInfC{$a_7(x, y, z, u) \in D(\sigma_{n \in x} y) \quad [\gamma, x \in U_0, y \in U_0, z \in D(x), u \in D(y)]$}
+\UnaryInfC{$a_8(x, y, z, u) \in D(\prod_{n \in x} y) \quad [\gamma, x \in U_0, y \in U_o, z \in D(x), u \in D(y)]$}
+\alwaysSingleLine
+\UnaryInfC{$El(a_0, a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8) \in D(a_0) \quad [\gamma]$}
+\end{prooftree}

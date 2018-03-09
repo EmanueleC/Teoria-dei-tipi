@@ -1,0 +1,238 @@
+\newpage
+\section{Tipi singoletto, delle liste e dei numeri naturali}
+
+\subsection{Esercizio 1-A}
+
+Dati i tipi singoletto e delle liste è possibile definire un tipo dei numeri 
+naturali Nat? \\
+
+Sì, ciascun numero n è rappresentabile come una lista di n singoletti (nil
+corrisponderà allo zero). Ad esempio $1 := cons(nil, *)$.
+
+\subsection{Esercizio 1-B}
+
+La teoria dei tipi che include tutte le regole finora descritte (singoletto,
+liste e naturali) eccetto quelle di sostituzione e di indebolimento rende
+ammissibili le regole di sostituzione e anche quelle di indebolimento.
+
+Qui di seguito viene solo mostrato qualche esempio che verifica la precedente
+affermazione.
+
+Prima regola di indebolimento:
+
+\begin{prooftree}
+\AxiomC{A type $[\Gamma]$}
+\AxiomC{$\Gamma, \Delta$  cont.}
+\BinaryInfC{A type $[\Gamma, \Delta]$}
+\end{prooftree}
+
+Esempio per il tipo singoletto:
+
+\begin{prooftree}
+\AxiomC{N1 type $[\Gamma]$}
+\AxiomC{$\Gamma, \Delta$ cont.}
+\BinaryInfC{N1 type $[\Gamma, \Delta]$}
+\end{prooftree}
+
+La regole è ammissibile, infatti esiste la seguente derivazione:
+
+\begin{prooftree}
+\AxiomC{$\Gamma, \Delta$ cont.}
+\UnaryInfC{N1 type $[\Gamma, \Delta]$}
+\end{prooftree}
+
+Lo stesso caso si applica in modo simile per i tipi List e Nat.
+
+\subsection{Esercizio 2}
+
+Definire l'operazione \textbf{append} di accostamento di una lista a un'altra di un tipo A 
+type [ ] usando le regole del tipo delle liste:
+$append(x, y) \in List(A) \quad [x \in List(A), y \in List(A)]$
+in modo tale che valga $append(x, nil) = x \in List(A) \quad [x \in List(A)]$
+
+Nota: definisco una funzione ausiliaria appendEnd che aggiunge un elemento alla fine 
+di una lista (al contrario di cons).
+
+\begin{lstlisting}[language=Coq]
+(* Definizione del tipo lista *)
+Inductive list (A : Type) :=
+  nil | cons (a : A) (tl : list A).
+
+Arguments nil {_}.
+Arguments cons {_} a tl.
+
+Infix "::" := cons.
+
+Fixpoint appendEnd {A} (x : list A) (y : A) :=
+  match x with
+  | nil => y :: nil
+  | s :: c => s :: (appendEnd c y)
+  end.
+
+Fixpoint append {A} (x : list A) (y : list A) :=
+  match y with
+  | nil => x
+  | a::bs => append (appendEnd x a) bs
+  end.
+\end{lstlisting}
+
+\subsection{Esercizio 3}
+
+I seguenti esercizi richiedono di scrivere funzioni che accettano tutte una 
+lista non vuota (diversa da nil). Viene quindi preliminarmente definito un tipo 
+notNil:
+
+\begin{lstlisting}[language=Coq]
+Definition notNil (A : Type) := { lt : list A | ~lt = nil }.
+\end{lstlisting}
+
+Specificare il tipo e definire le operazioni: \\
+
+(a) \textbf{back}, che data una lista non vuota ne estrae la lista meno il primo elemento:
+
+\begin{lstlisting}[language=Coq]
+Lemma ex_falso P : False -> P.
+Proof. move=> abs. case: abs. Qed.
+
+Definition back {A} (x : notNil A) : list A.
+Proof.
+case: x.
+move=> lt.
+case: lt.
+  move=> abs.
+  apply: ex_falso.
+  apply: abs.
+  apply: erefl.
+move=> _ lt _.
+apply: lt.
+Defined.
+\end{lstlisting}
+
+\begin{lstlisting}[language=Coq]
+(* back accetta argomenti di tipo notNil *)
+
+Lemma not_123_nil : ~ ( (1 :: 2 :: 3 :: nil) = nil).
+Proof.
+move=> E.
+change (match (1 :: 2 :: 3 :: nil) with nil => True | (_ :: _) => False end).
+rewrite E.
+apply: I.
+Qed.
+
+Definition n123n : notNil nat := exist _ (1 :: 2 :: 3 :: nil) not_123_nil.
+
+Eval compute in back n123n.
+\end{lstlisting}
+
+(b) l'operazione \textbf{front} che data una lista non vuota ne estrae la lista meno
+l'ultimo elemento
+
+da completare
+
+\begin{lstlisting}[language=Coq]
+Fixpoint front {A} (x : list A) : list A :=
+  match x with
+  | nil => nil
+  | a :: nil => nil
+  | s :: c => s :: front c
+  end.
+\end{lstlisting}
+
+(c) l'operazione \textbf{last} che data una lista non vuota ne estrae l'ultimo elemento
+
+(d) l'operazione \textbf{first} che data una lista non vuota ne estrae il primo
+elemento
+
+\begin{lstlisting}[language=Coq]
+Definition first {A} (x : notNil A) : A.
+Proof.
+case: x.
+move=> lt.
+case: lt.
+  move=> abs.
+  apply: ex_falso.
+  apply: abs.
+  apply: erefl.
+move=> a _ _.
+apply: a.
+Defined.
+
+Eval compute in back n123n.
+\end{lstlisting}
+
+\subsection{Esercizio 4}
+
+Definire un'operazione binaria \textbf{bin(x, y)} usando le regole del tipo dei numeri
+naturali: $bin(x, y) \in Nat \quad [x \in Nat, y \in Nat]$
+in modo tale che valga $bin(x, 0) = 0 \in Nat \quad [x \in Nat].$
+
+\begin{lstlisting}[language=Coq]
+Definition bin (x : nat)  (y : nat) :=
+  match y with
+  | 0 => 0
+  | S c => x
+  end.
+
+Lemma ex_bin (x : nat) : bin x 0 = 0.
+Proof.
+apply: erefl.
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 5}
+
+Definire l'operazione di addizione usando le regole del tipo dei numeri naturali:
+$x + y \in Nat \quad [x \in Nat, y \in Nat]$
+in modo tale che valga $x + 0 = x \in Nat \quad [x \in Nat]$.
+
+\begin{lstlisting}[language=Coq]
+Fixpoint sum (x : nat) (y : nat) :=
+  match y with
+  | 0 => x
+  | S c => S (sum x c)
+  end.
+
+Lemma ex_sum (x : nat) : sum x 0 = x.
+Proof.
+apply: erefl.
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 6}
+
+Definire l'operazione di addizione usando le regole del tipo dei numeri naturali:
+$x + y \in Nat \quad [x \in Nat, y \in Nat]$
+in modo tale che valga $0 + x = x \in Nat \quad [x \in Nat]$.
+
+\begin{lstlisting}[language=Coq]
+Fixpoint sum (x : nat) (y : nat) :=
+  match x with
+  | 0 => y
+  | S c => S (sum c y)
+  end.
+
+Lemma ex_sum (x : nat) : sum 0 x = x.
+Proof.
+apply: erefl.
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 7}
+
+Definire l'operazione di moltiplicazione usando le regole del tipo dei numeri 
+naturali: $x*y \in Nat \quad [x \in Nat, y \in Nat]$
+in modo tale che valga $x*0 = 0 \in Nat \quad [x \in Nat]$.
+
+\begin{lstlisting}[language=Coq]
+Fixpoint mul (x : nat) (y : nat) :=
+  match y with
+  | 0 => 0
+  | 1 => x
+  | S c => x + (mul x c)
+  end.
+
+Lemma mul_0 (x : nat) : mul x 0 = 0.
+Proof.
+apply: erefl.
+Qed.
+\end{lstlisting}

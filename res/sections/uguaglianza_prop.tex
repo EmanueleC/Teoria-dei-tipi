@@ -1,0 +1,166 @@
+\newpage
+\section{Uguaglianza proposizionale alla Gentzen/Lawvere e alla Leibniz}
+
+\subsection{Esercizio 1}
+
+In che relazione stanno i due tipi di uguaglianza?
+
+Il secondo tipo di uguaglianza alla Leibniz è più flessibile rispetto al primo:
+l'elemento $c(x) \in C(x,x) \quad [\gamma, x \in A]$ può dipendere da un elemento
+$x \in A$ diverso dall'elemento $a \in A \quad [\gamma]$.
+
+\subsection{Esercizio 2}
+
+Con quale tipo di uguaglianza si può dimostrare che dato un termine
+$f(x) \in B \quad [x \in A]$ si può trovare un proof-term q tale che:
+$q \in Id(B, f(x), f(y)) \quad [x \in A, y \in A, w \in Id(A,x,y)]$?
+
+\begin{lstlisting}[language=Coq]
+Module Leibniz.
+
+Definition eq {A} (a b : A) : Prop :=
+  forall P : A -> Prop, P a -> P b.
+
+Definition id {A} (a : A) : eq a a :=
+  fun P a => a.
+
+Definition el {A} (C : A -> A -> Prop) (a b : A) (p : eq a b) (c : forall x, C x x) : C a b :=
+  p (C a) (c a).
+
+Definition conv {A} (C : A -> A -> Prop) (a : A) (c : forall x, C x x) : C a a :=
+  el C a a (id a) c.
+
+End Leibniz.
+
+Lemma q {A} {B} (x y : A) (f : A -> B) (w : Leibniz.eq x y) : (Leibniz.eq (f x) (f y)).
+Proof.
+apply (Leibniz.el (fun a b => Leibniz.eq a b) x y w (fun x => Leibniz.id x)).
+apply: Leibniz.id.
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 3}
+
+Con quale tipo di uguaglianza si può dimostrare che esiste un proof-term pf del
+tipo: $pf \in P(y) \quad [x \in A, y \in A, z \in P(x), w \in Id(A,x,y)]$?
+
+Si fa sempre riferimento al modulo dell'uguaglianza di Leibniz.
+
+\begin{lstlisting}[language=Coq]
+Lemma pf {A} {P} (x y : A) (z : P x) (w : Leibniz.eq x y) : Leibniz.eq y y.
+Proof.
+apply Leibniz.id.
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 4}
+
+Con quale tipo di uguaglianza si può dimostrare che esiste un proof-term pf del
+tipo: $pf \in Id(A,x,z) \quad [x \in A, y \in A, z \in A, w1 \in Id(A,x,y), w2 \in Id(A,y,z)]$?
+
+\begin{lstlisting}[language=Coq]
+Lemma pf {A} (x y z : A) (w1 : Leibniz.eq x y) (w2 : Leibniz.eq y z) : Leibniz.eq x z.
+Proof.
+apply (Leibniz.el (fun a b => Leibniz.eq a b) y z w2 (fun a => Leibniz.id a)).
+apply (Leibniz.el (fun a b => Leibniz.eq a b) x y w1 (fun a => Leibniz.id a)).
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 5}
+
+Con quale tipo di uguaglianza si può dimostrare che esiste un proof-term pf del
+tipo: $pf \in Id(N1, x, *) \quad [x \in N1]$?
+
+\begin{lstlisting}[language=Coq]
+Lemma pf (x : unit) : Leibniz.eq x tt.
+Proof.
+case: x.
+by [].
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 6}
+
+Con quale tipo di uguaglianza si può dimostrare che esiste un proof-term tale
+che è possibile definire l'addizione tra numeri naturali:
+$x + y \in Nat \quad [x \in Nat, y \in Nat]$ in modo tale che esistano dei proof-term pf1 e pf2 tali che: $pf1 \in Id(Nat, x + 0, x) \quad [x \in Nat], pf2 \in Id(Nat, 0 + x, x) \quad [x \in Nat]$?
+
+\begin{lstlisting}[language=Coq]
+Lemma pf1 (x : nat) : Leibniz.eq (x + 0) x.
+Proof.
+elim: x.
+by [].
+move=> x IHp //=.
+apply (Leibniz.el (fun a b => Leibniz.eq b a) (x + 0) x IHp (fun a => Leibniz.id a)).
+apply Leibniz.id.
+Qed.
+
+Lemma pf2 (x : nat) : Leibniz.eq (0 + x) x.
+Proof.
+case: x.
+by [].
+move=> n IHp //=.
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 8}
+
+Si dimostri che esiste un proof-term pf tale che:
+$pf \in Id(Nat, x' +_1 y', x' +_2 y') \quad [x' \in Nat, y' \in Nat]$
+dove $x' +_1 y' = sum1$ e $x' +_2 y' = sum2$.
+
+\begin{lstlisting}[language=Coq]
+Fixpoint sum1 (x : nat) (y : nat) :=
+  match y with
+  | 0 => x
+  | S c => S (sum1 x c)
+  end.
+
+Fixpoint sum2 (x : nat) (y : nat) :=
+  match x with
+  | 0 => y
+  | S c => S (sum2 c y)
+  end.
+
+Lemma sum1_zero (x : nat) : sum1 0 x = x.
+Proof.
+elim x.
+by [].
+move=> n IHp //=.
+by rewrite IHp.
+Qed.
+
+Lemma sum2_zero (x : nat) : sum2 x 0 = x.
+Proof.
+elim x.
+by [].
+move=> n IHp //=.
+by rewrite IHp.
+Qed.
+
+Lemma sum2_succ (x y : nat) : sum2 x (S y) = S (sum2 x y).
+Proof.
+elim x.
+by [].
+move=> n IHp //=.
+by rewrite IHp.
+Qed.
+
+Lemma pf (x y : nat) : Leibniz.eq (sum1 x y) (sum2 x y).
+Proof.
+elim y.
+by rewrite /= sum2_zero.
+move=> n IHp //=.
+rewrite sum2_succ.
+apply (Leibniz.el (fun a b => Leibniz.eq a b) (sum1 x n) (sum2 x n) IHp (fun a => Leibniz.id a)).
+apply: Leibniz.id.
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 10}
+
+Per esercizio si provi a definire il tipo dell'insieme ``vuoto'' N0.
+
+\begin{lstlisting}[language=Coq]
+Inductive N0 : Set := .
+\end{lstlisting}

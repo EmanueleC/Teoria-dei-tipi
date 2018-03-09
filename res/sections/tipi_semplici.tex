@@ -1,0 +1,45 @@
+\newpage
+\section{Rappresentazione dei tipi semplici in teoria dei tipi dipendenti}
+
+\subsection{Esercizio 1}
+
+Si dimostri che se $a = b \in A \quad [\gamma]$ è derivabile nella teoria dei tipi
+con le regole finora introdotte esiste un proof-term pf tale che:
+$pf \in Id(A, a, b) \quad [\gamma]$ è derivabile.
+
+\begin{lstlisting}[language=Coq]
+Lemma a_equal_b {A} (a b : A) : a = b.
+Proof.
+Admitted.
+
+Lemma pf {A} (a b : A) : eq a b.
+Proof.
+apply (a_equal_b a b).
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 2A}
+
+La $\eta$-conversione del tipo prodotto ovvero:
+$<\pi_1(z),\pi_2(z)> = z \in A X B \quad [z \in A X B]$
+è derivabile?
+
+Non è derivabile. Il termine $<\pi_1(z),\pi_2(z)>$ è in forma normale e canonica,
+mentre la variabile z è in forma normale ma non è canonica.
+Se due termini sono uguali definizionalmente, allora anche le loro forme normali
+devono essere identiche e in questo caso è falso.
+
+\subsection{Esercizio 2B}
+
+\'{E} derivabile la corrispondente uguaglianza proposizionale, ovvero esiste un
+proof-term pf tale che:
+$pf \in Id(A x B, <\pi_1(z), \pi_2(z)>, z ) \in A X B \quad [z \in A X B]$ è
+derivabile nella teoria dei tipi dipendenti?
+
+\begin{lstlisting}[language=Coq]
+Lemma pf {A} {B} (z : prod A B) : eq (pair (fst z) (snd z)) z.
+Proof.
+destruct z.
+by rewrite /=.
+Qed.
+\end{lstlisting}

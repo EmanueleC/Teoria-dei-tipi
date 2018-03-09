@@ -1,0 +1,130 @@
+\newpage
+\section{Tipi somma indiciata e tipi prodotto dipendente}
+
+\subsection{Esercizio 1}
+
+Provare a scrivere le regole del tipo prodotto cartesiano AxB di un tipo A con
+un tipo B. \\
+
+\textbf{Regola di formazione:}
+
+\begin{prooftree}
+\AxiomC{A type $[\gamma]$}
+\AxiomC{B type $[\gamma]$}
+\BinaryInfC{AxB type $[\gamma]$}
+\end{prooftree}
+
+\textbf{Regola di introduzione:}
+
+\begin{prooftree}
+\AxiomC{$a \in A \quad [\gamma]$}
+\AxiomC{$b \in B \quad [\gamma]$}
+\BinaryInfC{<a,b> $\in$ AxB $[\gamma]$}
+\end{prooftree}
+
+\textbf{Regole di eliminazione:}
+
+\begin{prooftree}
+\AxiomC{$d \in$ AxB $[\gamma]$}
+\UnaryInfC{$\pi_1(d) \in A [\gamma]$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$d \in$ AxB $[\gamma]$}
+\UnaryInfC{$\pi_2(d) \in B [\gamma]$}
+\end{prooftree}
+
+\textbf{Regole di conversione:}
+
+\begin{prooftree}
+\AxiomC{$a \in A \quad [\gamma]$}
+\AxiomC{$b \in B \quad [\gamma]$}
+\BinaryInfC{$\pi_1(<a,b>) = a \in A [\gamma]$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$a \in A \quad [\gamma]$}
+\AxiomC{$b \in B \quad [\gamma]$}
+\BinaryInfC{$\pi_2(<a,b>) = b \in B [\gamma]$}
+\end{prooftree}
+
+\subsection{Esercizio 2}
+
+Provare a scrivere le regole del tipo delle funzioni $A \rightarrow B \quad [\gamma]$ da un
+tipo A a un tipo B. \\
+
+\textbf{Regola di formazione:}
+
+\begin{prooftree}
+\AxiomC{A type $[\gamma]$}
+\AxiomC{B type $[\gamma]$}
+\BinaryInfC{$A \rightarrow B$ type $[\gamma]$}
+\end{prooftree}
+
+\textbf{Regola di introduzione:}
+
+\begin{prooftree}
+\AxiomC{$f(x) \in B \quad [\gamma, x \in A]$}
+\UnaryInfC{$\lambda x. f(x) \in A \rightarrow B \quad [\gamma]$}
+\end{prooftree}
+
+\textbf{Regola di eliminazione:}
+
+\begin{prooftree}
+\AxiomC{$a \in$ A $[\gamma]$}
+\AxiomC{$f \in A \rightarrow B \quad [\gamma]$}
+\BinaryInfC{$Ap(f, a) \in B(a) \quad [\gamma]$}
+\end{prooftree}
+
+\textbf{Regola di conversione:}
+
+\begin{prooftree}
+\AxiomC{$a \in A \quad [\gamma]$}
+\AxiomC{$f(x) \in B \quad [\gamma, x \in A]$}
+\BinaryInfC{$Ap(\lambda x. f(x), a) = f(a) \in B [\gamma]$}
+\end{prooftree}
+
+\subsection{Esercizio 3}
+
+Come rappresentare con i tipi finora descritti il tipo dei naturali positivi?
+E il tipo delle liste non vuote?
+
+\begin{lstlisting}[language=Coq]
+Definition nat_pos := { n : nat | ~ n = 0 }.
+
+Lemma uno_not_zero : ~ (1 = 0).
+Proof.
+by [].
+Qed.
+
+Definition uno_pos : nat_pos := exist _ 1 uno_not_zero.
+
+Inductive list (A : Type) :=
+  nil | cons (a : A) (tl : list A).
+
+Arguments nil {_}.
+Arguments cons {_} a tl.
+
+Definition list_notNil {A} := { l : list A | ~ l = nil }.
+
+Infix "::" := cons.
+
+Lemma list_not_nil : ~ (1 :: nil = nil).
+Proof.
+by [].
+Qed.
+
+Definition uno_not_nil : list_notNil := exist _ (1 :: nil) list_not_nil.
+
+\end{lstlisting}
+
+\subsection{Esercizio 4}
+
+Come rappresentare con i tipi finora descritti il tipo delle funzioni tra
+naturali positivi?
+
+Si rappresenta con il tipo $\Pi_{x \in Nat+} Nat+$.
+
+\begin{lstlisting}[language=Coq]
+Definition funNatPos := nat_pos -> nat_pos.
+\end{lstlisting}

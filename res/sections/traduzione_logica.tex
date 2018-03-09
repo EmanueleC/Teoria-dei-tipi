@@ -1,0 +1,184 @@
+\newpage
+\section{Come tradurre la logica predicativa con uguaglianza in teoria dei tipi}
+
+\subsection{Esercizio 1}
+
+Si mostri che il seguente principio di scelta, detto comunemente assioma di scelta è derivabile: \\
+
+$\forall x \in A \exists y \in B \quad \Re (x, y) \rightarrow \exists f \in A \rightarrow B \forall x \in A \quad \Re (x, f(x)) \quad [\gamma]$ \\
+
+Traduzione logica: \\
+
+Occorre trovare un proof-term pf: \\
+
+$pf \equiv \lambda w. p(w) \in \prod_{x \in A} \sum_{y \in B} \Re (x, y) \rightarrow \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma]$ \\
+
+Applicazione della regola di introduzione di $\rightarrow$:
+
+\begin{prooftree}
+\AxiomC{$p(w) \in \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\UnaryInfC{$\lambda w. p(w) \in \prod_{x \in A} \sum_{y \in B} \Re (x, y) \rightarrow \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma]$}
+\end{prooftree}
+
+Applicazione della regola di eliminazione di $\prod$:
+
+\begin{prooftree}
+\AxiomC{$x \in A \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\AxiomC{$w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\BinaryInfC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\end{prooftree}
+
+Applicazione della (prima) regola di eliminazione del prodotto cartesiano $x$:
+
+\begin{prooftree}
+\AxiomC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\UnaryInfC{$\pi_1 (Ap(w, x)) \in B \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\end{prooftree}
+
+Applicazione della (seconda) regola di eliminazione del prodotto cartesiano $x$:
+
+\begin{prooftree}
+\AxiomC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\UnaryInfC{$\pi_2 (Ap(w, x)) \in \Re (x, \pi_1 (Ap (w, x)) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\end{prooftree}
+
+Infine, applicando la regola di introduzione di $\sum$:
+
+\begin{prooftree}
+\alwaysNoLine
+\AxiomC{}
+\UnaryInfC{$\pi_1 (Ap(w, x)) \in B \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\UnaryInfC{$\pi_2 (Ap(w, x)) \in \Re (x, \pi_1 (Ap (w, x)) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\UnaryInfC{$\prod_{x \in A} \Re (x, f(x)) type \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x)), f \in A \rightarrow B]$}
+\alwaysSingleLine
+\UnaryInfC{$<\lambda x. \pi_1 (Ap(w, x)), \lambda x. \pi_2 (Ap(w, x))> \in \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\end{prooftree}
+
+così, $p(w) =  <\lambda x. \pi_1 (Ap(w, x)), \lambda x. \pi_2 (Ap(w, x))>$.
+
+\subsection{Esercizio 3A}
+
+Supposto di rappresentare il tipo dei booleani come $Boole = N1 + N1$ con:
+$0 = inl(*), 1 = inr(*)$
+
+e supposto che esista un proof-term:
+$dis \in N_0 \quad [z \in Id(Boole, 0, 1)]$
+
+si dimostri che dati due tipi A type e B type esiste una funzione:
+$f(z) \in \sum_{x \in Boole} ( (Id(Boole, x, 1) \rightarrow A) X (Id(Boole, x, 0) \rightarrow B) ) \quad [ z \in A + B ]$
+
+\begin{lstlisting}[language=Coq]
+Inductive Boole :=
+  | inr (a : unit)
+  | inl (a : unit).
+
+Inductive N0 :=.
+
+Lemma dis (z : eq (inr tt) (inl tt)) : N0.
+Proof.
+Admitted.
+
+Lemma es {A} {B} (z: A + B) :
+sigT (fun x : Boole => prod (eq x (inr tt) -> A) (eq x (inl tt) -> B)).
+Proof.
+case: z.
+move=> a.
+exists (inr tt).
+rewrite //=.
+move=> b.
+exists (inl tt).
+rewrite //=.
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 3B}
+
+\dots ed anche una funzione:
+
+$g(w) \in A + B \quad [w \in \sum_{x \in Boole} ( (Id(Boole, x, 1) \rightarrow A) x (Id(Boole, x, 0) \rightarrow B) )]$
+
+\begin{lstlisting}[language=Coq]
+Lemma eq_unit_inr_tt (a : unit) : eq (inr a) (inr tt).
+Proof.
+by case a.
+Qed.
+
+Lemma eq_unit_inl_tt (a : unit) : eq (inl a) (inl tt).
+Proof.
+by case a.
+Qed.
+
+Lemma es2 {A} {B} (w : sigT (fun x : Boole => prod (eq x (inr tt) -> A) (eq x (inl tt) -> B))) : A + B.
+Proof.
+destruct w.
+destruct p.
+case x.
+\end{lstlisting}
+
+\subsection{Esercizio 8}
+
+Per ogni connettivo e quantificatore della logica predicativa con uguaglianza si
+descrivano le relative regole con giudizi del tipo $\phi \quad prop \quad [\gamma]$ e
+$\phi \quad true \quad [\gamma]$ di formazione, introduzione ed eliminazione che risultano
+ammissibili in teorie dei tipi.
+
+Svolto su carta.
+
+\subsection{Esercizio 9}
+
+Verificare che tutti gli assiomi di Peano sono validi in teoria dei tipi con le
+regole finora introdotte e interpretando le formule logiche come sopra
+descritto.
+
+\begin{lstlisting}[language=Coq]
+Lemma P1 : forall x : nat, 0 <> S x.
+Proof.
+by [].
+Qed.
+
+Definition pred (x : nat) : nat :=
+  match x with
+  | 0 => 0
+  | S n => n
+  end.
+
+Lemma P2 : forall x y : nat, x = y -> S x = S y.
+Proof.
+move=> x y eq.
+replace (x = y) with (pred (S x) = pred (S y)) by auto using pred_Sn.
+by rewrite eq.
+Qed.
+
+Lemma P3 (x : nat) : x + 0 = x.
+Proof.
+by [].
+Qed.
+
+Lemma P4 : forall x y : nat, x + S y = S (x + y).
+Proof.
+move=> x y.
+elim x.
+by rewrite /=.
+move=> n IHp.
+by rewrite /= IHp.
+Qed.
+
+Lemma P5 : forall x : nat, x*0 = 0.
+Proof.
+by [].
+Qed.
+
+Lemma P6 : forall x y : nat, x*(S y) = x*y + x.
+Proof.
+by [].
+Qed.
+
+Lemma P7 : forall (x : nat) (P : nat -> Prop), P 0 -> (forall n : nat, P n -> P (S n)) -> P x.
+Proof.
+move=> x P base IHp.
+elim x.
+apply base.
+move=> n Pn.
+by apply: IHp.
+Qed.
+\end{lstlisting}

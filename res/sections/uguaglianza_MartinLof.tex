@@ -1,0 +1,161 @@
+\newpage
+\section{Sull'uguaglianza proposizionale}
+
+\subsection{Esercizio 1}
+
+Per capire l'importanza della regola di eliminazione del tipo di uguaglianza
+proposizionale formulato da Martin-Lof si dimostri che se si aggiunge alla
+teoria dei tipi con il tipo di uguaglianza proposizionale formulato da
+Martin-Lof le seguenti regole di unicità dei proof-term di uguaglianza:
+
+\begin{prooftree}
+\AxiomC{$a \in A [\gamma]$}
+\AxiomC{$p \in Id_p(A, a, a) [\gamma]$}
+\BinaryInfC{$Iduni(a, p) \in Id(Id(A, a, a), p, id(a)) [\gamma]$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$a \in A [\gamma]$}
+\UnaryInfC{$Iduni(a, id(a)) = id(id(a)) \in Id(Id(A, a, a) , id(a), id(a) )$}
+\end{prooftree}
+
+allora si dimostra che dati $a \in A \quad [\gamma]$ e $b \in A \quad [\gamma]$ c'è un
+proof-term pf: \\
+
+\begin{center}
+$pf \in \forall_{w1 \in Id(A, a, b)} \forall_{w2 \in Id(A, a, b)} Id(Id(A, a, b), w1, w2) \quad [\gamma]$
+\end{center}
+
+ovvero i proof-term di un tipo di uguaglianza proposizionale sono tutti uguali
+proposizionalmente.
+
+\begin{lstlisting}[language=Coq]
+Inductive MartinLof (A : Type) : A -> A -> Type :=
+| ml_eq a: MartinLof A a a.
+
+Lemma I_IdUni {A} (a : A) (p : MartinLof A a a) : MartinLof _ p (ml_eq A a).
+Proof.
+Admitted.
+
+Lemma C_Iduni {A} (a: A):
+MartinLof _ (I_IdUni a (ml_eq A a)) (ml_eq (MartinLof A a a) (ml_eq A a)).
+Proof.
+Admitted.
+
+Lemma pf {A} (a b : A) : forall w1 : MartinLof A a b, (forall w2 : MartinLof A a b, MartinLof (MartinLof A a b) w1 w2).
+Proof.
+move=> w1 w2.
+destruct w1.
+by destruct (I_IdUni a w2).
+Qed.
+\end{lstlisting}
+
+\subsection{Esercizio 3}
+
+Sia k un numero naturale. Dare le regole del tipo $N_k$ con k elementi.
+Poi dimostrare che nella teoria dei tipi estesa con i tipi $N_k$, ognuno di
+questi tipi risulta isomorfo a un tipo definibile a partire dai costrutti di
+tipo precedentemente descritti. \\
+
+\textbf{Definizione di isomorfismo} \\
+
+Un tipo $A \quad type \quad [\gamma]$ si dice isomorfo a un tipo $B \quad type \quad [\gamma]$
+nella teoria dei tipi T se in T si possono derivare due termini: \\
+
+$f(x) \in B \quad [\gamma, x \in A]$ e $h(y) \in A \quad [\gamma, y \in B]$ \\
+
+tali per cui esistono dei proof-term pf1 e pf2 per cui in T si derivano: \\
+
+$pf1 \in Id(A, x, h(f(x))) \quad [\gamma, x \in A]$ e
+$pf2 \in Id(B, y, f(h(y))) \quad [\gamma, y \in B]$. \\
+
+Sia k un numero naturale. \\
+
+\textbf{Regole di formazione}: \\
+
+\begin{prooftree}
+\AxiomC{$\gamma$ cont.}
+\UnaryInfC{$N_0 \quad type \quad [\gamma]$}
+\end{prooftree}
+
+\textbf{Regole di introduzione}: \\
+
+\begin{prooftree}
+\AxiomC{$\gamma$ cont.}
+\UnaryInfC{$0 \in N_k \quad [\gamma]$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$\gamma$ cont.}
+\UnaryInfC{$k-1 \in N_k \quad [\gamma]$}
+\end{prooftree}
+
+\textbf{Regole di eliminazione}: \\
+
+\begin{prooftree}
+\AxiomC{$k \in N_k \quad [\gamma]$}
+\AxiomC{$D(z)$ type $[\gamma, z \in N_k]$}
+\AxiomC{$d_0 \in D(0) \quad [\gamma]$}
+\AxiomC{$d_{k-1} \in D(k-1) \quad [\gamma]$}
+\QuaternaryInfC{$El_k(k, d_0, ..., d_{k-1}) \in D(k) \quad [\gamma]$}
+\end{prooftree}
+
+\textbf{Regole di conversione}: \\
+
+nota: $i \in [0 ... k-1]$
+
+\begin{prooftree}
+\AxiomC{$k \in N_k \quad [\gamma]$}
+\AxiomC{$D(z)$ type $[\gamma, z \in N_k]$}
+\AxiomC{$d_0 \in D(0) \quad [\gamma]$}
+\AxiomC{$d_{k-1} \in D(k-1) \quad [\gamma]$}
+\QuaternaryInfC{$El_k(k, d_0, ..., d_{k-1}) = c_i \in D(k) \quad [\gamma]$}
+\end{prooftree}
+
+Preso k = 2, mostrare l'isomorfismo tra $N_2$ e $\{x|x \leq 2\}$ (in Coq):
+
+\begin{lstlisting}[language=Coq]
+Inductive N2 := zero | uno.
+
+Definition minore_di_due := {x|x<2}.
+
+Lemma zero_min_due : 0<2.
+Proof.
+by [].
+Qed.
+
+Lemma uno_min_due : 1<2.
+Proof.
+by [].
+Qed.
+
+Definition f (x : N2) : minore_di_due :=
+ match x with
+ | zero => exist _ 0 zero_min_due
+ | uno => exist _ 1 uno_min_due
+ end.
+
+Definition h (y : minore_di_due) : N2 :=
+ match y with
+ | exist 0 _ => zero
+ | exist (S n) _ => uno
+ end.
+
+Lemma pf1 (x : N2) : x = h (f x).
+Proof.
+by case x.
+Qed.
+
+Lemma ex_falso P : False -> P.
+Proof. move=> abs. case: abs. Qed.
+
+Lemma pf2 (y : minore_di_due) : y = f (h y).
+Proof.
+apply: val_inj.
+case: y => [[| [|y]] Py].
+by rewrite /=.
+by rewrite /=.
+rewrite /=.
+by apply: ex_falso.
+Qed.
+\end{lstlisting}
