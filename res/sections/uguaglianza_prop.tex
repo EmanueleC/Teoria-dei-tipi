@@ -69,7 +69,7 @@ Qed.
 \subsection{Esercizio 5}
 
 Con quale tipo di uguaglianza si può dimostrare che esiste un proof-term pf del
-tipo: $pf \in Id(N1, x, *) \quad [x \in N1]$?
+tipo: $pf \in Id(N_1, x, *) \quad [x \in N_1]$?
 
 \begin{lstlisting}[language=Coq]
 Lemma pf (x : unit) : Leibniz.eq x tt.
@@ -78,6 +78,39 @@ case: x.
 by [].
 Qed.
 \end{lstlisting}
+
+\begin{prooftree}
+\AxiomC{$x \in N1$ $[\Gamma]$}
+\AxiomC{$Id_L(N_1,z,*)$ type $[\Gamma,z \in N_1]$}
+\AxiomC{$c \in Id_L(N_1, *, *)$ $[\Gamma]$}
+\TrinaryInfC{$El_{N_1}(x,c) \in Id_L(N_1, x, *)$ $[\Gamma]$}
+\end{prooftree}
+
+dove:
+
+\begin{prooftree}
+\AxiomC{\checkmark}
+\UnaryInfC{$N_1$ type $[\Gamma, z \in N_1]$}
+\AxiomC{\checkmark}
+\UnaryInfC{$z \in N_1$ $[\Gamma,z \in N_1]$}
+\AxiomC{\checkmark}
+\UnaryInfC{$* \in N_1$ $[\Gamma, z \in N_1]$}
+\TrinaryInfC{$Id_L(N_1,z,*)$ type $[\Gamma, z \in N_1]$}
+\end{prooftree}
+
+e:
+
+\begin{prooftree}
+\AxiomC{\checkmark}
+\UnaryInfC{$* \in N_1$ $[\Gamma]$}
+\UnaryInfC{$c \in Id_L(N_1, *, *)$ $[\Gamma]$}
+\end{prooftree}
+
+c = id(x).
+
+Quindi il proof-term cercato è:
+
+$El_{N_1}(x,id(*)) \in Id_L(N_1, x, *)$ $[\Gamma]$
 
 \subsection{Esercizio 6}
 

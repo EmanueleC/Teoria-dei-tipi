@@ -220,6 +220,9 @@ apply: erefl.
 Qed.
 \end{lstlisting}
 
+L'operazione sum è definita dal seguente elemento (non canonico e non in
+forma normale): $sum(x',y') = El_{Nat}(x',y',(x,y).succ(y))$
+
 \subsection{Esercizio 7}
 
 Definire l'operazione di moltiplicazione usando le regole del tipo dei numeri 
@@ -239,3 +242,6 @@ Proof.
 apply: erefl.
 Qed.
 \end{lstlisting}
+
+L'operazione mul è definita dal seguente elemento (non canonico e non in
+forma normale): $mul(x',y') = El_{Nat}(y',0,(x,y).sum(x,y))$

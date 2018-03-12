@@ -18,6 +18,27 @@ apply (a_equal_b a b).
 Qed.
 \end{lstlisting}
 
+Premessa: se $a = b \in A \quad [\gamma]$ è derivabile allora anche
+$A$ type $[\gamma]$, $a \in A$ $[\gamma]$ e $b \in A$ $[\gamma]$
+sono derivabili.\\
+
+Usando la regola \textit{sub-eq-typ}:
+
+\begin{prooftree}
+\AxiomC{$Id(A,x,y)$ type $[\Gamma, x \in A, y \in A]$}
+\AxiomC{$a = a \in A \quad [\Gamma]$}
+\AxiomC{$a = b \in A \quad [\Gamma]$}
+\TrinaryInfC{$Id(A,a,a) = Id(A,a,b)\quad [\Gamma]$}
+\end{prooftree}
+
+e poi la regola \textit{conv}:
+
+\begin{prooftree}
+\AxiomC{$id(a) \in Id(A,a,a) \quad [\Gamma]$}
+\AxiomC{$Id(A,a,a) = Id(A,a,b)\quad [\Gamma]$}
+\BinaryInfC{$id(a) \in Id(A,a,b)\quad [\Gamma]$}
+\end{prooftree}
+
 \subsection{Esercizio 2A}
 
 La $\eta$-conversione del tipo prodotto ovvero:
@@ -33,7 +54,7 @@ devono essere identiche e in questo caso è falso.
 
 \'{E} derivabile la corrispondente uguaglianza proposizionale, ovvero esiste un
 proof-term pf tale che:
-$pf \in Id(A x B, <\pi_1(z), \pi_2(z)>, z ) \in A X B \quad [z \in A X B]$ è
+$pf \in Id(A X B, <\pi_1(z), \pi_2(z)>, z ) \in A X B \quad [z \in A X B]$ è
 derivabile nella teoria dei tipi dipendenti?
 
 \begin{lstlisting}[language=Coq]
