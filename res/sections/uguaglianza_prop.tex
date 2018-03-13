@@ -34,8 +34,7 @@ End Leibniz.
 
 Lemma q {A} {B} (x y : A) (f : A -> B) (w : Leibniz.eq x y) : (Leibniz.eq (f x) (f y)).
 Proof.
-apply (Leibniz.el (fun a b => Leibniz.eq a b) x y w (fun x => Leibniz.id x)).
-apply: Leibniz.id.
+apply (Leibniz.el (fun a b => Leibniz.eq (f a) (f b)) x y w (fun x => Leibniz.id (f x))).
 Qed.
 \end{lstlisting}
 
@@ -62,7 +61,7 @@ tipo: $pf \in Id(A,x,z) \quad [x \in A, y \in A, z \in A, w1 \in Id(A,x,y), w2 \
 Lemma pf {A} (x y z : A) (w1 : Leibniz.eq x y) (w2 : Leibniz.eq y z) : Leibniz.eq x z.
 Proof.
 apply (Leibniz.el (fun a b => Leibniz.eq a b) y z w2 (fun a => Leibniz.id a)).
-apply (Leibniz.el (fun a b => Leibniz.eq a b) x y w1 (fun a => Leibniz.id a)).
+apply w1.
 Qed.
 \end{lstlisting}
 

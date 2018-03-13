@@ -25,19 +25,29 @@ sono derivabili.\\
 Usando la regola \textit{sub-eq-typ}:
 
 \begin{prooftree}
-\AxiomC{$Id(A,x,y)$ type $[\Gamma, x \in A, y \in A]$}
-\AxiomC{$a = a \in A \quad [\Gamma]$}
-\AxiomC{$a = b \in A \quad [\Gamma]$}
+\AxiomC{\checkmark}
+\UnaryInfC{\dots}
+\UnaryInfC{$Id(A,x,y)$ type $[\Gamma, x \in A, y \in A]$}
+\AxiomC{\checkmark}
+\UnaryInfC{\dots}
+\UnaryInfC{$a = a \in A \quad [\Gamma]$}
+\AxiomC{\checkmark}
+\UnaryInfC{$a = b \in A \quad [\Gamma]$}
 \TrinaryInfC{$Id(A,a,a) = Id(A,a,b)\quad [\Gamma]$}
 \end{prooftree}
 
 e poi la regola \textit{conv}:
 
 \begin{prooftree}
-\AxiomC{$id(a) \in Id(A,a,a) \quad [\Gamma]$}
-\AxiomC{$Id(A,a,a) = Id(A,a,b)\quad [\Gamma]$}
+\AxiomC{\checkmark}
+\UnaryInfC{\dots}
+\UnaryInfC{$id(a) \in Id(A,a,a) \quad [\Gamma]$}
+\AxiomC{\checkmark}
+\UnaryInfC{$Id(A,a,a) = Id(A,a,b)\quad [\Gamma]$}
 \BinaryInfC{$id(a) \in Id(A,a,b)\quad [\Gamma]$}
 \end{prooftree}
+
+la derivazione è conclusa.
 
 \subsection{Esercizio 2A}
 
