@@ -5,7 +5,7 @@
 
 Si mostri che il seguente principio di scelta, detto comunemente assioma di scelta è derivabile: \\
 
-$\forall x \in A \exists y \in B \quad \Re (x, y) \rightarrow \exists f \in A \rightarrow B \forall x \in A \quad \Re (x, f(x)) \quad [\gamma]$ \\
+$\forall x \in A, \exists y \in B \quad \Re (x, y) \rightarrow \exists f \in A \rightarrow B, \forall x \in A \quad \Re (x, f(x)) \quad [\gamma]$ \\
 
 Traduzione logica: \\
 
@@ -16,30 +16,47 @@ $pf \equiv \lambda w. p(w) \in \prod_{x \in A} \sum_{y \in B} \Re (x, y) \righta
 Applicazione della regola di introduzione di $\rightarrow$:
 
 \begin{prooftree}
-\AxiomC{$p(w) \in \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\AxiomC{$p(w) \in \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
 \UnaryInfC{$\lambda w. p(w) \in \prod_{x \in A} \sum_{y \in B} \Re (x, y) \rightarrow \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma]$}
+\end{prooftree}
+
+Si cerca il termine $p(w)$.
+
+Applicando la regola di introduzione di $\sum$:
+
+\begin{prooftree}
+\alwaysNoLine
+\AxiomC{}
+\UnaryInfC{$m \in A \rightarrow B \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\UnaryInfC{$n \in \prod_{x \in A} \Re (x, \pi_1 (Ap (w, x)) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\UnaryInfC{$\prod_{x \in A} \Re (x, f(x)) type \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\alwaysSingleLine
+\UnaryInfC{$<m,n> \in \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\end{prooftree}
+
+m e n sono due termini funzione del tipo $\lambda x^A.b(x)$:
+
+Applicazione della (prima) regola di eliminazione del prodotto cartesiano $X$:
+
+\begin{prooftree}
+\AxiomC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\UnaryInfC{$\pi_1 (Ap(w, x)) \in A \rightarrow B \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\end{prooftree}
+
+Applicazione della (seconda) regola di eliminazione del prodotto cartesiano $X$:
+
+\begin{prooftree}
+\AxiomC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\UnaryInfC{$\pi_2 (Ap(w, x)) \in \Re (x, \pi_1 (Ap (w, x)) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
 \end{prooftree}
 
 Applicazione della regola di eliminazione di $\prod$:
 
 \begin{prooftree}
-\AxiomC{$x \in A \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
-\AxiomC{$w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
-\BinaryInfC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
-\end{prooftree}
-
-Applicazione della (prima) regola di eliminazione del prodotto cartesiano $x$:
-
-\begin{prooftree}
-\AxiomC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
-\UnaryInfC{$\pi_1 (Ap(w, x)) \in B \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
-\end{prooftree}
-
-Applicazione della (seconda) regola di eliminazione del prodotto cartesiano $x$:
-
-\begin{prooftree}
-\AxiomC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
-\UnaryInfC{$\pi_2 (Ap(w, x)) \in \Re (x, \pi_1 (Ap (w, x)) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\AxiomC{$x \in A \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\AxiomC{\checkmark}
+\UnaryInfC{$w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\BinaryInfC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
 \end{prooftree}
 
 Infine, applicando la regola di introduzione di $\sum$:
@@ -47,9 +64,9 @@ Infine, applicando la regola di introduzione di $\sum$:
 \begin{prooftree}
 \alwaysNoLine
 \AxiomC{}
-\UnaryInfC{$\pi_1 (Ap(w, x)) \in B \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
-\UnaryInfC{$\pi_2 (Ap(w, x)) \in \Re (x, \pi_1 (Ap (w, x)) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
-\UnaryInfC{$\prod_{x \in A} \Re (x, f(x)) type \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x)), f \in A \rightarrow B]$}
+\UnaryInfC{$\pi_1 (Ap(w, x)) \in A \rightarrow B \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\UnaryInfC{$\pi_2 (Ap(w, x)) \in \Re (x, \pi_1 (Ap (w, x)) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\UnaryInfC{$\prod_{x \in A} \Re (x, f(x)) type \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
 \alwaysSingleLine
 \UnaryInfC{$<\lambda x. \pi_1 (Ap(w, x)), \lambda x. \pi_2 (Ap(w, x))> \in \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
 \end{prooftree}
