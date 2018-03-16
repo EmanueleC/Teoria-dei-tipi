@@ -28,50 +28,45 @@ Applicando la regola di introduzione di $\sum$:
 \alwaysNoLine
 \AxiomC{}
 \UnaryInfC{$m \in A \rightarrow B \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
-\UnaryInfC{$n \in \prod_{x \in A} \Re (x, \pi_1 (Ap (w, x)) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
-\UnaryInfC{$\prod_{x \in A} \Re (x, f(x)) type \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\UnaryInfC{$n \in \prod_{x \in A} \Re (m, f(m)) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\UnaryInfC{$\prod_{x \in A} \Re (x, f(x))$ type $ [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
 \alwaysSingleLine
-\UnaryInfC{$<m,n> \in \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\UnaryInfC{$p(w) \equiv <m,n> \in \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
 \end{prooftree}
 
-m e n sono due termini funzione del tipo $\lambda x^A.b(x)$:
-
-Applicazione della (prima) regola di eliminazione del prodotto cartesiano $X$:
+Applicazione della regola di introduzione di $\rightarrow$ (m deve essere un termine della forma $\lambda x^A . b(x)$)
 
 \begin{prooftree}
-\AxiomC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
-\UnaryInfC{$\pi_1 (Ap(w, x)) \in A \rightarrow B \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\AxiomC{$b(x) \in B \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y), x \in A$]}
+\UnaryInfC{$\lambda x^A . b(x) \in A \rightarrow B \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
 \end{prooftree}
 
-Applicazione della (seconda) regola di eliminazione del prodotto cartesiano $X$:
+Applicazione della regola di introduzione di $\prod$ (anche n deve essere un termine della forma $\lambda x^A . r(x)$)
 
 \begin{prooftree}
-\AxiomC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
-\UnaryInfC{$\pi_2 (Ap(w, x)) \in \Re (x, \pi_1 (Ap (w, x)) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\AxiomC{$r(x) \in \Re (m, f(m)) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y), x \in A]$}
+\UnaryInfC{$\lambda x^A . r(x) \in \prod_{x \in A} \Re (m, f(m)) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
 \end{prooftree}
 
-Applicazione della regola di eliminazione di $\prod$:
+Ora è possibile sfruttare il termine w per capire chi sono m e n:
 
 \begin{prooftree}
-\AxiomC{$x \in A \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
-\AxiomC{\checkmark}
-\UnaryInfC{$w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
-\BinaryInfC{$Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
+\AxiomC{$s \equiv \pi_1(k(x)) \in B \quad [\gamma, x \in A]$}
+\AxiomC{$t \equiv \pi_2(k(x)) \in \Re (s, y) \quad [\gamma, x \in A]$}
+\AxiomC{$\Re (x, y)$ type $[\gamma, x \in A, y \in B]$}
+\TrinaryInfC{$k(x) \equiv <s,t> \in \sum_{y \in B} \Re (x, y) \quad [\gamma, x \in A]$}
+\UnaryInfC{$w \equiv \lambda x^A . k(x) \in \prod_{x \in A} \sum_{y \in B} \Re (x, y) \quad [\gamma]$}
 \end{prooftree}
 
-Infine, applicando la regola di introduzione di $\sum$:
+Occorre capire chi è k(x). Per farlo si applica la regola di eliminazione di $\prod$:
 
 \begin{prooftree}
-\alwaysNoLine
-\AxiomC{}
-\UnaryInfC{$\pi_1 (Ap(w, x)) \in A \rightarrow B \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
-\UnaryInfC{$\pi_2 (Ap(w, x)) \in \Re (x, \pi_1 (Ap (w, x)) \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
-\UnaryInfC{$\prod_{x \in A} \Re (x, f(x)) type \quad [\gamma, w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y)]$}
-\alwaysSingleLine
-\UnaryInfC{$<\lambda x. \pi_1 (Ap(w, x)), \lambda x. \pi_2 (Ap(w, x))> \in \sum_{f \in A \rightarrow B} \prod_{x \in A} \Re (x, f(x)) \quad [\gamma, w \in \prod_{x \in A} \Re (x, f(x))]$}
+\AxiomC{$x \in A \quad [\gamma, x \in A]$}
+\AxiomC{$w \in \prod_{x \in A} \sum_{y \in B} \Re (x, y) \quad [\gamma, x \in A]$}
+\BinaryInfC{$k(x) \equiv Ap(w, x) \in \sum_{y \in B} \Re (x, y) \quad [\gamma, x \in A]$}
 \end{prooftree}
 
-così, $p(w) =  <\lambda x. \pi_1 (Ap(w, x)), \lambda x. \pi_2 (Ap(w, x))>$.
+A questo punto abbiamo che $p(w) \equiv <\lambda x^A . \pi_1(Ap(w, x)),\lambda x^A . \pi_2(Ap(w, x))>$.
 
 \subsection{Esercizio 3A}
 
@@ -85,9 +80,10 @@ si dimostri che dati due tipi A type e B type esiste una funzione:
 $f(z) \in \sum_{x \in Boole} ( (Id(Boole, x, 1) \rightarrow A) X (Id(Boole, x, 0) \rightarrow B) ) \quad [ z \in A + B ]$
 
 \begin{lstlisting}[language=Coq]
+(* Tipo booleano, si noti che i costruttori sono diversi dal tipo somma usuale - inr e inl *)
 Inductive Boole :=
-  | inr (a : unit)
-  | inl (a : unit).
+  | inrb (a : unit)
+  | inlb (a : unit).
 
 Inductive N0 :=.
 
@@ -96,14 +92,14 @@ Proof.
 Admitted.
 
 Lemma es {A} {B} (z: A + B) :
-sigT (fun x : Boole => prod (eq x (inr tt) -> A) (eq x (inl tt) -> B)).
+sigT (fun x : Boole => prod (eq x (inrb tt) -> A) (eq x (inlb tt) -> B)).
 Proof.
 case: z.
 move=> a.
-exists (inr tt).
+exists (inrb tt).
 rewrite //=.
 move=> b.
-exists (inl tt).
+exists (inlb tt).
 rewrite //=.
 Qed.
 \end{lstlisting}
@@ -115,21 +111,24 @@ Qed.
 $g(w) \in A + B \quad [w \in \sum_{x \in Boole} ( (Id(Boole, x, 1) \rightarrow A) x (Id(Boole, x, 0) \rightarrow B) )]$
 
 \begin{lstlisting}[language=Coq]
-Lemma eq_unit_inr_tt (a : unit) : eq (inr a) (inr tt).
+Lemma eq_unit_inr_tt (a : unit) : eq (inrb a) (inrb tt).
 Proof.
 by case a.
 Qed.
 
-Lemma eq_unit_inl_tt (a : unit) : eq (inl a) (inl tt).
+Lemma eq_unit_inl_tt (a : unit) : eq (inlb a) (inlb tt).
 Proof.
 by case a.
 Qed.
 
-Lemma es2 {A} {B} (w : sigT (fun x : Boole => prod (eq x (inr tt) -> A) (eq x (inl tt) -> B))) : A + B.
+Lemma es2 {A} {B} (w : sigT (fun x : Boole => prod (eq x (inrb tt) -> A) (eq x (inlb tt) -> B))) : A + B.
 Proof.
 destruct w.
 destruct p.
-case x.
+destruct x.
+apply (inl (a (eq_unit_inr_tt a0))).
+apply (inr (b (eq_unit_inl_tt a0))).
+Qed.
 \end{lstlisting}
 
 \subsection{Esercizio 8}
@@ -159,10 +158,15 @@ Definition pred (x : nat) : nat :=
   | S n => n
   end.
 
+Lemma pred_Sn : forall n:nat, pred (S n) = n.
+Proof.
+by [].
+Qed.
+
 Lemma P2 : forall x y : nat, x = y -> S x = S y.
 Proof.
 move=> x y eq.
-replace (x = y) with (pred (S x) = pred (S y)) by auto using pred_Sn.
+replace (x = y) with (pred (S x) = pred (S y)) by auto using pred_Sn. (*uso il lemma pred_Sn*)
 by rewrite eq.
 Qed.
 
@@ -173,11 +177,7 @@ Qed.
 
 Lemma P4 : forall x y : nat, x + S y = S (x + y).
 Proof.
-move=> x y.
-elim x.
-by rewrite /=.
-move=> n IHp.
-by rewrite /= IHp.
+by [].
 Qed.
 
 Lemma P5 : forall x : nat, x*0 = 0.
