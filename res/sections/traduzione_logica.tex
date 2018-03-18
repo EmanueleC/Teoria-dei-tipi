@@ -131,6 +131,26 @@ apply (inr (b (eq_unit_inl_tt a0))).
 Qed.
 \end{lstlisting}
 
+\subsection{Esercizio 6}
+
+Si provi il seguente principio chiamato \textit{existence property under a context}:
+Se $\exists y$ $\Phi(y)$ true $[\Gamma]$ è derivabile in teoria dei tipi allora
+esiste un proof-term \textbf{pf} tale che: $\Phi(pf)$ true $[\Gamma]$ è
+derivabile in teoria dei tipi.
+
+\begin{lstlisting}[language=Coq]
+(*Lemma: esiste un termine che rende vero phi*)
+Lemma exist_y {A} : forall (phi: A -> Prop), (exists y: A, phi y).
+Proof.
+Admitted.
+
+(*Dimostrare che esiste un proof-term che rende vero phi*)
+Lemma ex_pf {A} : forall (phi: A -> Prop), (exists pf:A, phi pf).
+move=> phi.
+apply exist_y.
+Qed.
+\end{lstlisting}
+
 \subsection{Esercizio 8}
 
 Per ogni connettivo e quantificatore della logica predicativa con uguaglianza si

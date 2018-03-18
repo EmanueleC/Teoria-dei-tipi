@@ -1,13 +1,70 @@
 \newpage
-\section{Tipi singoletto, delle liste e dei numeri naturali}
 
-Nota - come svolgere gli esercizi con Coq:
+\section{Breve note su Coq}
+
+Cosa importare per svolgere gli esercizi con il proof assistant?
 
 \begin{lstlisting}[language=Coq]
 From Coq Require Import Init.Prelude Unicode.Utf8.
 From Coq Require Import ssreflect ssrfun ssrbool.
 From mathcomp Require Import eqtype ssrnat div prime.
 \end{lstlisting}
+
+\subsection{Comandi ricorrenti e loro breve descrizione}
+
+Una lista di comandi ricorrenti negli esercizi svolti:
+
+\begin{itemize}
+\item \textbf{Match}: fornisce l'analisi per casi. I casi del match parlano
+della forma canonica di un termine.
+ 
+\item \textbf{Fixpoint}: permette di scrivere definizioni induttive.
+
+Le regole computazionali dell'eliminatore sono date dalla combinazione di match
+e Fixpoint
+
+\item \textbf{Funzioni anonime}, esempio: \texttt{fun x : nat => x + 1}
+
+\item \textbf{Tipi di dato}, esempio: \texttt{Inductive nat := O | S (n : nat)}
+
+\item \textbf{Pattern matching}, esempio: \texttt{match x with O => .. | S p => ..}
+
+\item \textbf{Ricorsione}, esempio: \texttt{Fixpoint addn n m := ...}
+
+\item \textbf{Polimorfismo}, esempio: \texttt{Inductive pair (A B : Type) := ..}
+
+\item \textbf{Apply t}: Questa tattica si applica a qualsiasi goal e tenta di fare un
+match con la conclusione del termine t che riceve in input.
+In altre parole, usa t per dimostrare il goal corrente, ovvero t è un termine
+che abita il tipo del goal.
+
+\item \textbf{Dimostrare} = costruire termini passo passo.
+
+\item \textbf{Struttura di un lemma}: \texttt{Lemma nome : tipo. Proof. ...prova... Qed.}
+
+\item \textbf{Move}: La tattica $=>$ sposta le variabili, le definizioni locali e le
+assunzioni nel contesto corrente.
+
+\item \textbf{Unfold}: Sostituisce il nome con il corpo: \texttt{unfold name in hyp}.
+
+\item \textbf{Rewrite}: riscrive un'espressione usando le uguaglianze a disposizione (sia nelle
+librerie che quelle precedentemente definite).
+
+\item \textbf{Erefl}: dimostra eq per termini uguali una volta nomalizzati.
+
+\item \textbf{Forall}: lega tipi, termini o niente. Per dimostrare un predicato del tipo
+$\forall x : A, P x$ occorre fornire una funzione che, data una prova di A (chiamata x),
+produce una prova di P x.
+
+\item \textbf{Change}: cambia la forma del goal corrente in una convertibile.
+
+\item \textbf{Case}: effettua un'analisi per casi senza ricorsione.
+
+\item \textbf{Elim}: effettua un'analisi per induzione.
+\end{itemize}
+
+\newpage
+\section{Tipi singoletto, delle liste e dei numeri naturali}
 
 \subsection{Esercizio 1-A}
 
