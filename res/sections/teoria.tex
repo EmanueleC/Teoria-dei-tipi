@@ -1,0 +1,51 @@
+\newpage
+\appendix
+\section{Note teoriche}
+
+Nella matematica classica una proposizione è vera o falsa
+indipendentemente dal fatto che si possa provare o no.
+%Da qui nascono tutti i casini
+
+Lo stesso non si può dire per la matematica costruttiva, dove
+(ad esempio) $A \lor \neg A$ non è valido a prescindere.
+
+Per farlo occorre fornire una prova di A o una prova di $\neg A$.
+Quindi $A \lor \neg A$ non è una tautologia.
+La spiegazione costruttivista di una proposizione si dà in termini
+di prove, non in termini di oggetti matematici che esistono
+indipendentemente da tutto.
+
+La frase ``propositions as sets'' identifica le proposizioni con
+l'insieme delle loro prove.
+
+Ad esempio, la proposizione $A \land B$ sarà un insieme dato
+dalle sue prove. Una prova di $A \land B$ è una coppia dove il
+primo elemento è una prova di A e il secondo una prova di B.
+
+Quando due espressioni sono dei sinonimi da un punto di vista sintattico,
+si dice che sono uguali definizionalmente o intensionalmente e si usa
+il simbolo $\equiv$.
+Ad esempio $e \equiv ((x)e)x$
+
+Dal momento in cui si vedono le proposizioni come insiemi, il falso
+corrisponde all'insieme vuoto.
+
+Per ogni insieme A con operazioni ci sono 4 tipi di regole da definire:
+
+\begin{itemize}
+\item \textbf{Regole di formazione} - spiegano sotto quali assunzioni
+A è un insieme e quando è uguale a un altro insieme B.
+\item \textbf{Regole di introduzione} - spiegano come si formano gli
+elementi canonici di A e quando due elemeni canonici sono uguali.
+In queste regole vengono introdotti i costruttori di A.
+\item \textbf{Regole di eliminazione} - mostrano come provare una
+proposizione per un elemento arbitrario dell'insieme. Queste regole
+usano un approccio induttivo in quanto basta dimostrare che un
+elemento canonico arbitrario gode di una proprietà P per
+dimostrare che vale anche per un altro elemento.
+Il selettore/eliminatore viene introdotto in questa regola ed è una
+costante non canonica del tipo che permette di effettuare pattern
+matching e ricorsione primitiva.
+\item \textbf{Regole di conversione} - descrivono le regole di
+computazione del selettore/eliminatore introdotto nelle regole precedenti.
+\end{itemize}
